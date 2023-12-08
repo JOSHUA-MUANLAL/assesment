@@ -22,7 +22,8 @@ app.set('view engine', 'ejs');
 app.set('views', viewsPath);
 
 // create connection
-var con = mysql.createConnection({
+var con = mysql.createPool({
+    connectionLimit: 10,
     host: "sql12.freesqldatabase.com",
     port: 3306,
     user: "sql12668750",
