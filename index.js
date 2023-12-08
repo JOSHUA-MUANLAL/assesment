@@ -81,7 +81,7 @@ app.post('/registration',(req,res)=>{
                             var data={
                                 done:"registered"
                             }
-                            res.render("templates/form",data)
+                            res.render("templates/form",{data:data})
                           });
 
 
