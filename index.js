@@ -16,7 +16,7 @@ app.use(session({
 
 
 // Assuming your views folder is in the root directory of your project
-const viewsPath = path.join(__dirname, 'assesment/templates');
+const viewsPath = path.join(__dirname, '/templates');
 
 app.set('view engine', 'ejs');
 app.set('views', viewsPath);
