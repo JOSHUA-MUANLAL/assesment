@@ -210,13 +210,7 @@ con.connect((err)=>{
 
 })
 
-con.end(function(err) {
-  if (err) {
-    console.error('Error ending the pool: ' + err.stack);
-    return;
-  }
-  console.log('Connection pool closed.');
-});
+
 
 
 
