@@ -15,7 +15,8 @@ app.use(session({
       }
   }));
 
-
+app.use(bodyParser.urlencoded({ extended: true })); // Add this line to parse URL-encoded bodies
+app.use(bodyParser.json());
 // Assuming your views folder is in the root directory of your project
 const viewsPath = path.join(__dirname);
 
