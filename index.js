@@ -2,7 +2,7 @@ const express=require('express');
 const mysql=require('mysql2')
 const app=express();
 const session=require('express-session')
-
+const path = require('path');
 
 app.use(session({
     secret: 'joshua', 
@@ -13,10 +13,13 @@ app.use(session({
         maxAge: 86400000, // Set the expiration time in milliseconds (e.g., 24 hours)
       }
   }));
-app.use(express.urlencoded({ extended: true }));
-app.set('view engine', 'ejs');
-app.set('views', 'D:/COLLEGE/assesment');
 
+
+// Assuming your views folder is in the root directory of your project
+const viewsPath = path.join(__dirname, 'views');
+
+app.set('view engine', 'ejs');
+app.set('views', viewsPath);
 
 // create connection
 var con = mysql.createConnection({
