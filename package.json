@@ -5,5 +5,16 @@
     "express-session": "^1.17.3",
     "mysql2": "^3.6.5",
     "node": "^21.2.0"
+  },
+  "name": "vercel-testing",
+  "version": "1.0.0",
+  "description": "node express testing",
+  "main": "index.js",
+  "engines": {
+    "node": "18.x"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
