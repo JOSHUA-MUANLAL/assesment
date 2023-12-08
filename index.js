@@ -20,10 +20,11 @@ app.set('views', 'D:/COLLEGE/assesment');
 
 // create connection
 var con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "9596802233",
-    database:"banao"
+    host: "sql12.freesqldatabase.com",
+    port: 3306,
+    user: "sql12668750",
+    password: "xE2Lj2BjdM",
+    database:"sql12668750"
   });
 
 
