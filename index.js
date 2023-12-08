@@ -142,27 +142,30 @@ app.post('/login',(req,res)=>{
     const user=req.body.user;
     const password=req.body.password;
 
-    con.query("SELECT * FROM user_detail where user_name=? and password=?",[user,password],(err,result)=>{
+    con.connect((err)=>{
         if (err) throw err;
-
-        if (result!=0){
-            req.session.username=user;
-            req.session.password=password;
-
-            var data={
-                user:user,
-                password:password
-            };
-            console.log(req.session);
-            res.render("templates/userinterface",{ data: data });
-        }
-        else{
-
-            var data={
-                data:"yout password of user in invalid"
-            };
-            res.render('templates/login',{data:data})
-        }
+        con.query("SELECT * FROM user_detail where user_name=? and password=?",[user,password],(err,result)=>{
+            if (err) throw err;
+    
+            if (result!=0){
+                req.session.username=user;
+                req.session.password=password;
+    
+                var data={
+                    user:user,
+                    password:password
+                };
+                console.log(req.session);
+                res.render("templates/userinterface",{ data: data });
+            }
+            else{
+    
+                var data={
+                    data:"yout password of user in invalid"
+                };
+                res.render('templates/login',{data:data})
+            }
+        })
     })
 
 
@@ -179,24 +182,27 @@ app.get('/forgot',(req,res)=>{
 app.post('/forgot',(req,res)=>{
 
 const email=req.body.mail;
-
-con.query("SELECT password FROM user_detail WHERE email=?",[email],(err,result)=>{
+con.connect((err)=>{
     if (err) throw err;
-
-    if (result.length>0){
-       
-        res.render('templates/forgotpassword',{result:result[0]})
-
-    }
+    con.query("SELECT password FROM user_detail WHERE email=?",[email],(err,result)=>{
+        if (err) throw err;
+    
+        if (result.length>0){
+           
+            res.render('templates/forgotpassword',{result:result[0]})
+    
+        }
+    })
 })
 
 
+
 })
 
 
 
 
 
-app.listen(process.env.PORT,()=>{
-    console.log(`server started at Port : ${process.env.PORT}`);
-})
+app.listen(3000, () => {
+    console.log('Server is running on http://localhost:3000');
+});
