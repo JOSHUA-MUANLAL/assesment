@@ -24,12 +24,14 @@ app.set('views', viewsPath);
 
 // create connection
 var con = mysql.createPool({
-    connectionLimit: 10,
     host: "sql12.freesqldatabase.com",
     port: 3306,
     user: "sql12668750",
     password: "xE2Lj2BjdM",
-    database:"sql12668750"
+    database:"sql12668750",
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
   });
 
 
@@ -61,20 +63,20 @@ app.post('/registration',(req,res)=>{
     }
 
     //to check if email is available
-    con.connect((err)=>{
+    con.getConnection((err,connection)=>{
         if (err) throw err;
-        con.query("SELECT email From user_detail WHERE email=?",[email],function (err, result) {
+        connection.query("SELECT email From user_detail WHERE email=?",[email],function (err, result) {
             if (err) throw err;
             if (result.length === 0) { 
                 // Check if the result array is empty
                 console.log('Email available');
                 //TO check if user name is available
-                con.query("SELECT user_name FROM user_detail WHERE user_name=?",[user_name],function(err,result2){
+                connection.query("SELECT user_name FROM user_detail WHERE user_name=?",[user_name],function(err,result2){
                     if (err) throw err;
                     if (result2.length===0){
 
                         console.log("user is available")
-                        con.query("INSERT INTO user_detail SET ? ",entry, function (err, result) {
+                        connection.query("INSERT INTO user_detail SET ? ",entry, function (err, result) {
                             if (err) throw err;
                             console.log("1 record inserted");
         
@@ -148,9 +150,9 @@ app.post('/login',(req,res)=>{
     const user=req.body.user;
     const password=req.body.password;
 
-    con.connect((err)=>{
+    con.getConnection((err,connection)=>{
         if (err) throw err;
-        con.query("SELECT * FROM user_detail where user_name=? and password=?",[user,password],(err,result)=>{
+        connection.query("SELECT * FROM user_detail where user_name=? and password=?",[user,password],(err,result)=>{
             if (err) throw err;
     
             if (result!=0){
@@ -162,6 +164,7 @@ app.post('/login',(req,res)=>{
                     password:password
                 };
                 console.log(req.session);
+                connection.release();
                 res.render("templates/userinterface",{ data: data });
             }
             else{
@@ -169,6 +172,7 @@ app.post('/login',(req,res)=>{
                 var data={
                     data:"yout password of user in invalid"
                 };
+                connection.release();
                 res.render('templates/login',{data:data})
             }
         })
@@ -188,12 +192,13 @@ app.get('/forgot',(req,res)=>{
 app.post('/forgot',(req,res)=>{
 
 const email=req.body.mail;
-con.connect((err)=>{
+con.getConnection((err,connection)=>{
     if (err) throw err;
-    con.query("SELECT password FROM user_detail WHERE email=?",[email],(err,result)=>{
+    connection.query("SELECT password FROM user_detail WHERE email=?",[email],(err,result)=>{
         if (err) throw err;
     
         if (result.length>0){
+            connection.release();
            
             res.render('templates/forgotpassword',{result:result[0]})
     
@@ -205,7 +210,13 @@ con.connect((err)=>{
 
 })
 
-
+con.end(function(err) {
+  if (err) {
+    console.error('Error ending the pool: ' + err.stack);
+    return;
+  }
+  console.log('Connection pool closed.');
+});
 
 
 
