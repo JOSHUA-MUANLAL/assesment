@@ -3,6 +3,7 @@ const mysql=require('mysql2')
 const app=express();
 const session=require('express-session')
 const path = require('path');
+const bodyParser = require('body-parser');
 
 app.use(session({
     secret: 'joshua', 
